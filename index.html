@@ -1,0 +1,60 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NBA Player Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+    }
+    input {
+      padding: 8px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #playerInfo {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>NBA Player Search</h1>
+  <label for="playerName">Enter Player Name:</label>
+  <input type="text" id="playerName" placeholder="Enter player name">
+  <button onclick="searchPlayer()">Search</button>
+
+  <div id="playerInfo"></div>
+
+  <script>
+    async function searchPlayer() {
+      const playerName = document.getElementById('playerName').value;
+      const playerInfoDiv = document.getElementById('playerInfo');
+      
+      try {
+        const response = await fetch(`http://localhost:3000/api/player/${playerName}`);
+        const playerData = await response.json();
+
+        // Display player information
+        const playerInfoHTML = `
+          <h2>${playerData.first_name} ${playerData.last_name}</h2>
+          <p>Position: ${playerData.position}</p>
+          <p>Team: ${playerData.team.full_name}</p>
+          <p>Height: ${playerData.height_feet}' ${playerData.height_inches}"</p>
+          <p>Weight: ${playerData.weight_pounds} lbs</p>
+        `;
+        playerInfoDiv.innerHTML = playerInfoHTML;
+      } catch (error) {
+        console.error(error);
+        playerInfoDiv.innerHTML = '<p style="color: red;">Player not found or internal server error</p>';
+      }
+    }
+  </script>
+</body>
+</html>

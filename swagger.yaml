@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: NBA Player Search API
+  version: 1.0.0
+  description: API for searching NBA player information
+
+paths:
+  /:
+    get:
+      summary: Get the home page
+      responses:
+        '200':
+          description: Success
+          content:
+            text/html:
+              example: "<!DOCTYPE html><html><body><h1>Welcome to NBA Player Search API</h1></body></html>"
+
+  /api/player/{name}:
+    get:
+      summary: Get NBA player information by name
+      parameters:
+        - in: path
+          name: name
+          required: true
+          description: The name of the NBA player to search for
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                id: 237
+                first_name: LeBron
+                height_feet: 6
+                height_inches: 8
+                last_name: James
+                position: F
+                team:
+                  id: 14
+                  abbreviation: LAL
+                  city: Los Angeles
+                  conference: West
+                  division: Pacific
+                  full_name: Los Angeles Lakers
+                  name: Lakers
+                weight_pounds: 250
+        '404':
+          description: Player not found
+          content:
+            application/json:
+              example:
+                error: Player not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                error: Internal server error
